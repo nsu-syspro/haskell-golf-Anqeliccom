@@ -12,7 +12,11 @@ module Task1 where
 -- []
 --
 encode :: Eq a => [a] -> [(Int, a)]
-encode = error "TODO: define encode"
+encode = foldr f []
+  where
+    f x ((n, y):t)
+      | x == y = (n + 1, x) : t
+    f x t = (1, x) : t
 
 -- | Decompresses given data using run-length decoding.
 --
@@ -26,7 +30,10 @@ encode = error "TODO: define encode"
 -- []
 --
 decode :: [(Int, a)] -> [a]
-decode = error "TODO: define decode"
+decode = concatMap f
+  where
+    f (0, _) = []
+    f (n, x) = x : f (n - 1, x)
 
 -- | Rotates given finite list to the left for a given amount N
 --
@@ -46,4 +53,7 @@ decode = error "TODO: define decode"
 -- ""
 --
 rotate :: Int -> [a] -> [a]
-rotate = error "TODO: define rotate"
+rotate _ [] = []
+rotate n x = drop k x ++ take k x
+  where 
+    k = n `mod` length x
